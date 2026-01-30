@@ -1,34 +1,388 @@
 
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TOKYO YAKINIKU</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOKYO YAKINIKU | 厳選和牛と至高の空間</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Noto+Serif+JP:wght@300;400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        font-family: 'Montserrat', 'Noto Serif JP', serif;
-      }
-      .font-serif-jp {
-        font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-      }
+        :root {
+            --brand-red: #800000;
+        }
+        body {
+            font-family: 'Montserrat', 'Noto Serif JP', serif;
+            scroll-behavior: smooth;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+        .font-serif-jp {
+            font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+        }
+        .text-brand-red { color: var(--brand-red); }
+        .bg-brand-red { background-color: var(--brand-red); }
+        
+        /* スムース表示アニメーション */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* FAQアコーディオン */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* ガラスモルフィズム */
+        .glass-nav {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
-  }
-}
-</script>
 </head>
-  <body class="bg-zinc-50 text-zinc-900">
-    <div id="root"></div>
-  </body>
+<body class="antialiased">
+
+    <!-- ナビゲーション -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl md:text-2xl font-bold tracking-tighter">TOKYO YAKINIKU</a>
+            
+            <div class="hidden md:flex items-center space-x-8 text-xs tracking-widest font-medium">
+                <a href="#concept" class="hover:text-brand-red transition-colors">CONCEPT</a>
+                <a href="#menu" class="hover:text-brand-red transition-colors">MENU</a>
+                <a href="#access" class="hover:text-brand-red transition-colors">ACCESS</a>
+                <a href="https://lin.ee/xxxxxxxx" class="bg-[#06C755] text-white px-6 py-2.5 rounded shadow-lg hover:brightness-110 transition-all">LINE予約</a>
+            </div>
+
+            <!-- モバイルメニューボタン -->
+            <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
+                <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- モバイルオーバーレイメニュー -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black z-[45] hidden flex-col items-center justify-center space-y-8 text-2xl font-serif-jp tracking-widest">
+        <a href="#concept" class="mobile-link">CONCEPT</a>
+        <a href="#menu" class="mobile-link">MENU</a>
+        <a href="#voice" class="mobile-link">REVIEWS</a>
+        <a href="#access" class="mobile-link">ACCESS</a>
+        <a href="https://lin.ee/xxxxxxxx" class="bg-[#06C755] text-white px-10 py-4 rounded-full text-lg font-bold">LINE予約</a>
+    </div>
+
+    <!-- 1. ファーストビュー -->
+    <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Hero Meat" class="w-full h-full object-cover scale-105 opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black"></div>
+        </div>
+        <div class="relative z-10 text-center px-6">
+            <p class="text-white/80 text-sm md:text-base tracking-[0.5em] mb-6 font-light uppercase">Tradition & Innovation</p>
+            <h1 class="text-4xl md:text-7xl font-serif-jp text-white leading-tight mb-10 tracking-wider">
+                肉の芸術を、日常に。<br>
+                最高の一枚を、その手へ。
+            </h1>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                <a href="https://lin.ee/xxxxxxxx" class="w-full md:w-auto px-12 py-5 bg-[#06C755] text-white font-bold text-lg rounded shadow-2xl hover:scale-105 transition-transform">
+                    LINE公式から予約する
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div class="w-[1px] h-16 bg-white/20 mx-auto"></div>
+        </div>
+    </header>
+
+    <!-- 2. こだわり (Concept) -->
+    <section id="concept" class="py-24 bg-white text-zinc-900">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="w-full md:w-1/2 fade-in">
+                    <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Concept" class="w-full aspect-[4/5] object-cover shadow-2xl">
+                </div>
+                <div class="w-full md:w-1/2 space-y-8 fade-in">
+                    <h3 class="text-zinc-400 text-xs tracking-[0.4em] uppercase">Philosophy</h3>
+                    <h2 class="text-3xl md:text-5xl font-serif-jp leading-snug">
+                        五感で味わう、<br>
+                        本物の「焼肉」
+                    </h2>
+                    <div class="space-y-6 text-zinc-600 leading-relaxed font-light">
+                        <p>TOKYO YAKINIKUでは、全国からその日最高のA5ランク和牛を厳選。肉の繊維一本一本まで見極める熟練の職人が、最適な厚さでカットいたします。</p>
+                        <p>味の決め手となるタレは、創業以来継ぎ足される秘伝の味。炭火の香ばしさ、肉の甘み、そしてタレの深みが織りなす至福のハーモニーをお愉しみください。</p>
+                        <p>都会の喧騒を離れた隠れ家のような空間で、上質なひとときをお約束します。</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 pt-4 text-sm font-bold">
+                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-red rounded-full"></div>全席個室・半個室</div>
+                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-red rounded-full"></div>厳選A5和牛のみ</div>
+                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-red rounded-full"></div>ソムリエ厳選ワイン</div>
+                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-brand-red rounded-full"></div>無煙ロースター完備</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. おすすめメニュー -->
+    <section id="menu" class="py-24 bg-zinc-900 text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20 fade-in">
+                <p class="text-brand-red text-xs tracking-[0.5em] uppercase mb-4">Recommended Menu</p>
+                <h2 class="text-4xl md:text-5xl font-serif-jp tracking-widest">おすすめの一品</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Menu Item 1 -->
+                <div class="group fade-in">
+                    <div class="overflow-hidden mb-6 aspect-video">
+                        <img src="https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Meat" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-xl font-serif-jp">極上厚切りタン</h4>
+                        <span class="text-brand-red font-bold">¥2,800</span>
+                    </div>
+                    <p class="text-zinc-500 text-sm leading-relaxed">一頭から極僅かしか取れない「タン元」を使用。サクッとした歯ごたえと溢れる肉汁が特徴です。</p>
+                </div>
+                <!-- Menu Item 2 -->
+                <div class="group fade-in">
+                    <div class="overflow-hidden mb-6 aspect-video">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" alt="Meat" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-xl font-serif-jp">店主厳選 5種盛り</h4>
+                        <span class="text-brand-red font-bold">¥6,500</span>
+                    </div>
+                    <p class="text-zinc-500 text-sm leading-relaxed">本日の最高部位を5種。赤身と霜降りのバランスを考えた、当店一番人気の盛り合わせ。</p>
+                </div>
+                <!-- Menu Item 3 -->
+                <div class="group fade-in">
+                    <div class="overflow-hidden mb-6 aspect-video">
+                        <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" alt="Meat" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-xl font-serif-jp">幻のシャトーブリアン</h4>
+                        <span class="text-brand-red font-bold">¥9,800</span>
+                    </div>
+                    <p class="text-zinc-500 text-sm leading-relaxed">究極の柔らかさ。繊維を感じさせないほど繊細で、口の中で溶けていく感覚は正に「幻」。</p>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center fade-in">
+                <a href="https://lin.ee/xxxxxxxx" class="inline-block border border-white/30 px-10 py-4 hover:bg-white hover:text-black transition-all tracking-widest text-sm">LINEで全メニューを確認する</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. お客様の声 -->
+    <section id="voice" class="py-24 bg-white text-zinc-900">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <h2 class="text-center text-3xl font-serif-jp mb-16 fade-in tracking-widest">お客様の声</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-zinc-50 p-8 border-t-2 border-brand-red fade-in">
+                    <div class="flex text-brand-red mb-4 text-xs">★★★★★</div>
+                    <p class="text-sm text-zinc-600 leading-loose mb-6 italic">「接待で使用しましたが、お肉の質はもちろん、個室の雰囲気が非常に良く、お客様にも大変喜ばれました。また必ず利用します。」</p>
+                    <p class="text-xs font-bold text-zinc-400">40代・経営者</p>
+                </div>
+                <div class="bg-zinc-50 p-8 border-t-2 border-brand-red fade-in">
+                    <div class="flex text-brand-red mb-4 text-xs">★★★★★</div>
+                    <p class="text-sm text-zinc-600 leading-loose mb-6 italic">「タンが絶品！あんなに厚いのに驚くほど柔らかいです。特別な日のディナーはここ以外考えられません。」</p>
+                    <p class="text-xs font-bold text-zinc-400">30代・会社員</p>
+                </div>
+                <div class="bg-zinc-50 p-8 border-t-2 border-brand-red fade-in">
+                    <div class="flex text-brand-red mb-4 text-xs">★★★★★</div>
+                    <p class="text-sm text-zinc-600 leading-loose mb-6 italic">「スタッフさんの気遣いが素晴らしく、気持ちよく食事ができました。サイドメニューの冷麺も本場さながらのクオリティです。」</p>
+                    <p class="text-xs font-bold text-zinc-400">20代・主婦</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. アクセス -->
+    <section id="access" class="py-24 bg-zinc-50 text-zinc-900">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="flex flex-col md:flex-row gap-12 bg-white shadow-xl">
+                <div class="w-full md:w-1/2 p-8 md:p-16">
+                    <h2 class="text-3xl font-serif-jp mb-10 border-b-2 border-black inline-block">店舗案内</h2>
+                    <table class="w-full text-sm leading-loose">
+                        <tr class="border-b border-zinc-100">
+                            <th class="py-4 text-left w-1/3">所在地</th>
+                            <td class="py-4">〒150-0002 東京都渋谷区渋谷0-0-0<br><span class="text-zinc-400 text-xs tracking-tighter">※渋谷駅ハチ公口より徒歩5分</span></td>
+                        </tr>
+                        <tr class="border-b border-zinc-100">
+                            <th class="py-4 text-left">電話番号</th>
+                            <td class="py-4">03-0000-0000</td>
+                        </tr>
+                        <tr class="border-b border-zinc-100">
+                            <th class="py-4 text-left">営業時間</th>
+                            <td class="py-4">ランチ: 11:30 - 14:30<br>ディナー: 17:00 - 23:00</td>
+                        </tr>
+                        <tr>
+                            <th class="py-4 text-left">定休日</th>
+                            <td class="py-4">月曜日（祝日の場合は翌火曜）</td>
+                        </tr>
+                    </table>
+                    <div class="mt-10">
+                        <a href="#" class="inline-flex items-center gap-2 text-brand-red font-bold hover:underline">
+                            GOOGLE MAPSで見る
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 min-h-[400px]">
+                    <img src="https://picsum.photos/id/164/1200/800?grayscale" alt="Map Placeholder" class="w-full h-full object-cover filter brightness-75">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. よくある質問 -->
+    <section class="py-24 bg-white text-zinc-900">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-center text-3xl font-serif-jp mb-16 fade-in tracking-widest">よくある質問</h2>
+            <div class="space-y-4">
+                <div class="faq-item border border-zinc-200 fade-in">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-zinc-50">
+                        <span class="font-bold">Q. 予約なしでも入店できますか？</span>
+                        <span class="faq-icon text-2xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-answer px-6 bg-zinc-50">
+                        <p class="pb-6 text-sm text-zinc-600">はい、お席が空いていればご案内可能です。ただし週末は大変混み合いますので、LINE等での事前予約を強くおすすめしております。</p>
+                    </div>
+                </div>
+                <div class="faq-item border border-zinc-200 fade-in">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-zinc-50">
+                        <span class="font-bold">Q. 子供連れでも大丈夫ですか？</span>
+                        <span class="faq-icon text-2xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-answer px-6 bg-zinc-50">
+                        <p class="pb-6 text-sm text-zinc-600">もちろんです。個室もございますので、小さなお子様連れでも安心してゆっくりとお食事をお愉しみいただけます。</p>
+                    </div>
+                </div>
+                <div class="faq-item border border-zinc-200 fade-in">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-zinc-50">
+                        <span class="font-bold">Q. ドレスコードはありますか？</span>
+                        <span class="faq-icon text-2xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-answer px-6 bg-zinc-50">
+                        <p class="pb-6 text-sm text-zinc-600">特にございませんが、スマートカジュアルでのご来店をおすすめしております。清潔感のある装いであれば問題ございません。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 最後のCTA -->
+    <section class="py-24 bg-zinc-900 text-white relative overflow-hidden">
+        <div class="container mx-auto px-6 text-center relative z-10 fade-in">
+            <h2 class="text-3xl md:text-5xl font-serif-jp mb-8 leading-tight">
+                特別な一夜を、<br>
+                TOKYO YAKINIKUで。
+            </h2>
+            <p class="text-zinc-400 mb-12 max-w-xl mx-auto font-light">
+                今日という日を、忘れられない思い出に。最高の肉と最高のおもてなしでお待ちしております。
+            </p>
+            <a href="https://lin.ee/xxxxxxxx" class="inline-block px-16 py-6 bg-[#06C755] text-white font-bold text-xl rounded shadow-2xl hover:scale-105 transition-transform">
+                今すぐLINEで予約する
+            </a>
+            <p class="mt-6 text-xs text-zinc-500 tracking-widest uppercase">Available 24/7 on LINE</p>
+        </div>
+        <div class="absolute inset-0 opacity-20">
+            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1920&q=80" alt="Footer bg" class="w-full h-full object-cover">
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-black text-white py-12 border-t border-white/5">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-2xl font-bold tracking-tighter mb-8">TOKYO YAKINIKU</h2>
+            <div class="flex justify-center space-x-8 mb-12 text-[10px] tracking-[0.3em] font-medium text-white/40">
+                <a href="#concept" class="hover:text-white transition-colors">CONCEPT</a>
+                <a href="#menu" class="hover:text-white transition-colors">MENU</a>
+                <a href="#access" class="hover:text-white transition-colors">ACCESS</a>
+            </div>
+            <p class="text-[10px] text-white/20 tracking-widest uppercase">© 2024 TOKYO YAKINIKU. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+
+    <!-- スマホ用固定CTA -->
+    <div class="fixed bottom-0 left-0 w-full p-4 z-50 md:hidden flex gap-2">
+        <a href="https://lin.ee/xxxxxxxx" class="flex-grow flex items-center justify-center gap-2 bg-[#06C755] text-white font-bold py-4 rounded-xl shadow-2xl">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 10.304c0-5.231-5.383-9.486-12-9.486S0 5.073 0 10.304c0 4.689 4.27 8.602 10.032 9.327.39.085.92.258 1.177.592.235.305.154.78.076 1.087l-.333 1.436c-.103.439-.494 1.716 2.126.935 2.62-.78 14.125-8.318 14.125-13.435z"/></svg>
+            <span>LINE予約</span>
+        </a>
+    </div>
+
+    <script>
+        // フェードインアニメーションの監視
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // モバイルメニューのトグル
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuToggle.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('flex');
+            if (isOpen) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+                menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
+                document.body.style.overflow = '';
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex');
+                menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+                menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
+                document.body.style.overflow = '';
+            });
+        });
+
+        // FAQトグル
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
 </html>
+
